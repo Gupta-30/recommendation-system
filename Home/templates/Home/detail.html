@@ -1,0 +1,91 @@
+{% extends 'Home/base.html'%}
+{% block title %}{{movies.title}}{% endblock %}
+
+{% block body %}
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <div class="alert alert-success">
+              <strong>Success!</strong> {{message}}
+            </div>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+<div class="">
+
+    <div class="details">
+        <!-- Left Movie Info -->
+        <div class="card" style="width:210px; height:300px; border-radius:22px; align-items: center;">
+         <h5 style="color:black;"> {{movies.title}}</h5>
+                    <a href="#">
+                        <img src="{{ movies.movie_logo.url}}" class="img-responsive" >
+                    </a>
+                    
+<!--                </div>-->
+<!--            </div>-->
+        </div>
+        <!-- Right Movie Info -->
+        <div class="col-sm-offset-1 col-sm-4 col-md-4">
+            <h1 >{{movies.title}}</h1>
+            <h2 style="color:white;">Genre: {{movies.genre}}</h2>
+
+            <div class="col-sm-offset-0 col-sm-8">
+                <form class="form-horizontal" role="search" method="post" action="{% url 'detail' movies.id %}" onsubmit="return validateForm()"  name="ratingForm">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="row">
+                                <div class="col-lg-14">
+                                    <div class="star-rating">
+                                        <h2 style="color:white;">Rate Movie</h2>
+                                        <span class="fa fa-star-o fa-lg" data-rating="1"></span>
+                                        <span class="fa fa-star-o" data-rating="2"></span>
+                                        <span class="fa fa-star-o" data-rating="3"></span>
+                                        <span class="fa fa-star-o" data-rating="4"></span>
+                                        <span class="fa fa-star-o" data-rating="5"></span>
+                                        
+                                        {% if rate_flag %}
+                                            <input type="hidden" name="rating" class="rating-value" value="{{movie_rating}}" >
+                                        {% else %}
+                                            <input type="hidden" name="rating" class="rating-value" value="0">
+                                        {% endif %}
+                                        {% csrf_token %}
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="submit" class="button" value="Submit" style="margin-left: 50px; border-radius: 10px;margin-top: 10px;
+                        ">
+                        </div>
+                    </div>
+                </form>
+
+                <form class="form-horizontal" role="search" method="post" action="{% url 'detail' movies.id %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="input-group">
+                            <div class="row">
+                                <div class="col-lg-14">
+                                    <div class="star-rating">
+                                        <h3>Add to my list  </h3>
+                                        {% if update %}
+                                        <input type="checkbox" name="watch" checked>
+                                        <input type="submit" class="button" value="Remove" name="watch">
+                                        {% else %}
+                                        <input type="checkbox" name="watch">
+                                        <input type="submit" class="button" value="Add" style="width:70px;">
+
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+<!--                            <input type="submit" class="button" value="Add">-->
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'Home/base.html'%}
+{% block title %}Register{% endblock %}
+{% block body %}
+
+
+<div class="register">
+<h2 style="padding:30px;">Sign up</h2>
+ <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+      <div style="margin-bottom: 30px;">
+        {{ field.label_tag }}&nbsp;&nbsp;
+        {{ field }}
+        
+       
+        {% for error in field.errors %}
+          <p style="color: red">{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    <button type="submit" style="background-color: #327cea; width: 100px; height: 40px; border-radius: 8px; margin-top: 10px; border: none; color:white;">Register</button>
+    <div class="panel-footer">
+      <br> Have an account? <a href="{% url 'login' %}">Click here</a> to log in.
+  </div>
+  </form>
+</div>
+
+
+  {% endblock %}

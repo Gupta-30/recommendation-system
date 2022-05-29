@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Movies{% endblock title %}</title>
+    {% load static %}
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" >
+    <link rel="stylesheet" type="text/css" href="{% static 'Home/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <style>  
+  body{
+        background-image: url('https://the-movie-buff.herokuapp.com/static/image.jpg');
+        background-repeat: no-repeat;
+         background-attachment: fixed;
+          background-size: cover;
+    }
+html body{
+    overflow-x: hidden;
+}
+
+      .navbar-custom {
+        background-color: rgb(231 187 56);
+}
+.color-me{
+  color:rgb(22, 1, 1);
+  font-weight: bold;
+}
+.navbar-nav > li{
+  padding-left:20px;
+ 
+}
+
+.list-items{
+        padding: 10px 5px;
+        width: 100%;
+        border-bottom: 2px solid black;
+        background-color: white;
+        border-radius: 22px;
+        
+      }
+        
+        .star-rating .fa-star{
+        color: yellow;
+        }
+        
+        .heart-rating .fa-heart{
+        color:yellow;
+        }
+        .button {
+          background-color: #4CAF50;
+          border: none;
+          color: white;
+          text-align: center;
+          padding: 6px 6px;
+          font-size: 16px;
+          cursor: pointer;
+          border-radius: 10px;
+        }
+        .register{
+          margin:auto;
+          height: 550px;
+          width: 600px;
+          text-align:center;
+          color: rgb(7, 6, 6);
+          margin-top: 100px; 
+          background-color: white;  
+          border-radius: 15px;  
+        }
+        .details{
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+   
+    
+.movie_list{
+  width: 1200px;
+  display:flex; 
+  flex-wrap: wrap;
+  margin: auto;
+}
+.movie_card{
+  border-radius: 22px;
+   margin-left: 40px; 
+   width: 220px; 
+   margin-top: 50px;
+  height: 300px;
+    text-align: center;
+    
+   background-color: white;
+   color:black;
+}
+.image{
+  height:256px ;
+  width: 177px;
+  border-radius: 22px;
+}
+@media (max-width: 700px){
+  .movie_list{
+    width: 500px;
+    display:flex; 
+  flex-wrap: wrap;
+  margin: auto;
+  
+  }}
+  .register{
+    width:380px;
+    margin:auto;
+    height: 550px;
+    text-align:center;
+    color: rgb(7, 6, 6);
+    margin-top: 100px; 
+    background-color: white;  
+    border-radius: 15px;
+  }
+  .card{
+    height: 237px;;
+  }
+  
+
+   </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg  navbar-custom">
+      <a class="navbar-brand" href="#">Recommendation System</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto .nav.navbar-nav.navbar-right">
+            <li class="nav-item active">
+              <a class="nav-link color-me " href="/">Home </a>
+            </li>
+            <li class="nav-item active">
+              <a class="nav-link color-me " href="/watch">MyList </a>
+            </li>
+            
+        {% if not request.user.is_authenticated %}
+            <li>
+              <a class="nav-link color-me" href="/signup">SignUp</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link color-me" href="/login">Login</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link color-me " href="/logout">LogOut</a>
+              </li>
+        {% endif %}
+            
+            
+          </ul>
+          
+        </div>
+      </nav>
+      {% block body %}
+    {% endblock %}
+
+    
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+    <script src="{%static 'Home/js/jquery.min.js'%}"></script>
+	<script type="text/javascript" src="{%static 'Home/js/bootstrap.min.js'%}">
+	</script>
+    <script type="text/javascript">
+      var $star_rating = $('.star-rating .fa');
+  
+      var SetRatingStar = function() {
+          return $star_rating.each(function() {
+          if (parseInt($star_rating.siblings('input.rating-value').val()) >= parseInt($(this).data('rating'))) {
+              return $(this).removeClass('fa-star-o').addClass('fa-star');
+          } else {
+          return $(this).removeClass('fa-star').addClass('fa-star-o');
+          }
+          });
+          };
+  
+      $star_rating.on('click', function() {
+      $star_rating.siblings('input.rating-value').val($(this).data('rating'));
+      return SetRatingStar();
+      });
+  
+      SetRatingStar();
+      $(document).ready(function() {
+  
+      });
+  
+  </script>
+
+  <script type="text/javascript">
+      function validateForm(){
+      var x = document.forms["ratingForm"]["rating"].value;
+      if(x=="0"){
+          alert("Invalid Input");
+          return false;
+      }
+      }
+  </script>
+  
+  
+ <script>
+      //code For autocompletion of search bar in index.html
+  //making array of all available movies
+  
+   var films = [
+"12 Angry Men",
+"12 Years a Slave",
+"A Beautiful Mind",
+"Avatar",
+"Avengers: Infinity War ",
+"Avengers: Endgame",
+"Batmen Begins",
+"Casino Royale",
+"Coco",
+"The Dark Knight Rises",
+"Die Hard",
+"Django Unchained",
+"Drive",
+"Fight Club",
+"Forrest Gump",
+"Frozen",
+"Gladiator",
+"Gone Girl",
+"Good Will Hunting",
+"Gravity",
+"Guardians of the Galaxy",
+"Home Alone",
+"Inception",
+"Inside Out",
+"Interstellar",
+"Joker",
+"Memento",
+"Oldboy",
+"Parasite",
+"Pulp Fiction",
+"Schindler's List",
+"Shutter Island",
+"The Avengers",
+"The Lion King",
+"The Pianist",
+"The Shawshank Redemption",
+"The God Father",
+"The Truman Show",
+"The Wolf of Wall Street",
+"Toy Story",
+"Up"
+];
+// sorting the film array
+  sortedfilms=films.sort();
+let getinput=document.getElementById("getinput");
+getinput.addEventListener("keyup" , (e)=>{
+removeElements();
+for(let i of sortedfilms){
+  if(i.toLowerCase().startsWith(getinput.value.toLowerCase()) && getinput.value!=""){
+
+    //create list element
+    let listElement=document.createElement("li");
+    
+    //create a class list-items in created list
+    listElement.classList.add("list-items")
+    listElement.style.cursor="pointer";
+    listElement.setAttribute("onclick" ,"displayNames('"+i + "')");
+    let word=  i.substr(0, getinput.value.length)
+    word+= i.substr(getinput.value.length);
+    listElement.innerHTML=word;
+
+    //append the created list in ul tag with class 'list' given in index.html
+    document.querySelector(".list").appendChild(listElement)
+
+  }
+}
+});
+
+//function for getting the value in search bar on clicking a suggested movie
+function displayNames(value){
+getinput.value=value;
+removeElements();
+
+}
+
+//function for removing suggested movie after clicking a perticular movie
+function removeElements(){
+let items=document.querySelectorAll(".list-items");
+items.forEach((item) => {
+  item.remove();
+  
+});
+}
+       </script>
+       </body>
+</html>

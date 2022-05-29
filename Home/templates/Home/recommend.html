@@ -1,0 +1,31 @@
+{% extends 'Home/base.html'%}
+{% block title %}Recommendations{% endblock %}
+{% block body %}
+
+<div class="container-fluid">
+	<h2>Recommendations for you</h2>
+</div>
+<hr>
+<br>
+
+	
+
+    <!-- Movie list -->
+        <div class="movie_list">
+            {% if movie_list %}
+                {% for movie in movie_list %}
+                        <div class="movie_card" style="height:334px;">
+                             <h4 style="color:black;">{{movie.title}}</h4>
+                            <a href="{% url 'detail' movie.id %}">
+                                <img src="{{ movie.movie_logo.url}}" class="image">
+                            </a>
+                            <h5 style="color:black;">{{movie.genre}}</h5>
+                            
+                        </div>
+                
+                {% endfor %}
+            {% endif %}
+        </div>
+
+
+{% endblock %}

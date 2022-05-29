@@ -1,0 +1,30 @@
+
+<!-- page to show movie list of user-->
+{% extends 'Home/base.html'%}
+{% block body %}
+
+<div style="text-align:center; font-size:30px; margin-top: 40px; color: rgb(231 187 56); font-weight: bold;">Movies In the List..</div>
+<hr size="4" width="100%" color="white" style="opacity: 1;">
+<br>
+<!-- Movie list -->
+<div class="movie_list" >
+    {% if movies %}
+    {% for movie in movies %}
+        <div class="movie_card" style="height: 334px;">
+        
+                <h4 style="color:black;">{{movie.title}}</h4>
+                <a href="{% url 'detail' movie.id %}">
+                    <img src="{{ movie.movie_logo.url}}" class="image">
+                </a>
+                <h5 style="color:black;">{{movie.genre}}</h5>
+            </div>
+
+    {% endfor %}
+    {% else %}
+        <div class="alert" style="text-align:center; color:white; font-size:27px; background-color: #b85366;">
+            <strong>Sorry!</strong> No movies in your list.
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

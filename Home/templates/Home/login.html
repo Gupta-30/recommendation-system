@@ -1,0 +1,30 @@
+
+{% extends 'Home/base.html'%}
+{% block title %}Log In{% endblock %}
+
+{% block body %}
+<div class="main" style="background-color:white; height: 400px; width: 383px; margin: auto; border-radius: 15px; text-align: center;">
+  <h1 style="margin-top: 50px; padding: 50px; ">Sign In</h1>
+  {% if error_message %}
+      <p><strong>{{ error_message }}</strong></p>
+  {% endif %}
+  <div class="loginForm">
+    <form  class="form-horizontal" role="form" action="#" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+
+    <label for="username" style="font-size:20px;">Username: </label>
+    <input type="text" name="username" id="username" ><br><br><br>
+    <label for="password" style="font-size:20px;">Passwod: </label>
+    <input type="password" name="password" id="password"><br><br>
+    <button type="submit" style="height:50px; width:50px; height: 43px ; width: 91px; border-radius: 5px; margin-bottom: 19px; background-color: var(--bs-success); color: white;">Login</button>
+    <div>
+      Don't have an account? <a href="{% url 'signup' %}">Click here</a> to register.
+    </form>
+  </div>
+
+  </div>
+
+</div>
+
+         
+  {% endblock %}

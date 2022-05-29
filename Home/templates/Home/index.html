@@ -1,0 +1,53 @@
+{% extends 'Home/base.html'%}
+{% block body %}
+
+{% if not request.user.is_authenticated %}
+    <br>
+{% else %}
+     <div style="color: rgb(231 187 56);text-align:center; margin-top: 30px;"><h1>Welcome {{user.Username}} !!</h1></div>
+{% endif %}
+
+  <div class="main">
+      <div class="search" style="display: flex;justify-content: center; margin-bottom: 30px;">
+        <form action="" method="get" autocomplete="off">
+          <div>
+              <input id="getinput" name="q" value="{{ request.GET.q }}"  style="height: 50px; width:700px; border: 2px solid rgb(231 187 56); border-radius: 22px; padding-left: 10px; margin-top: 50px;" type="text" placeholder="Enter Movie here and rate it..">
+          <ul class="list" style="list-style:none;"></ul></div>
+          <button type="submit" style=" height: 45px; width: 117px; color: #171919; background-color: rgb(231 187 56); font-size: 20px; font-weight: bold; border-radius: 15px;margin-top: 19px; margin-left: 250px;  ">Search</button>
+        </form>
+      </div>
+      <div class="rec_btn">
+          <a href="{% url 'recommend' %}">
+          <button style="width: 300px; height:50px; color:rgb(16, 15, 15); margin-left: 1200px; border-radius: 10px; font-weight: bold; background-color: rgb(231 187 56); ">Get Recommendations Here</button></a>
+      </div>
+      <div class="headnig" style="text-align:center; color:rgb(231 187 56);">
+          <h1>Movies List</h1>
+      </div>
+      <hr size="4" width="100%" color="white" style="opacity: 1;">
+      
+
+
+  </div>
+
+<!-- Movie list -->
+    <div class="movie_list" >
+            {% if movies %}
+            {% for movie in movies %}
+                
+                <div class="movie_card">
+                       <h5 style="color:black;"><strong>{{movie.title}}</strong></h5>
+                        <a href="{% url 'detail' movie.id %}">
+                            <img src="{{ movie.movie_logo.url}}" class="image">
+                        </a>
+                        
+    
+                </div>
+            {% endfor %}
+            {% else %}
+                <div class="error" style="text-align:center; color:white;"><h1>This Movie is not in our database</h1></div>
+                {% endif %}
+        </div>
+</div>
+
+
+{% endblock %}
