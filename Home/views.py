@@ -10,7 +10,6 @@ from django.db.models import Case, When
 import pandas as pd
 import numpy as np
 from .forms import RegisterForm
-from scipy.sparse.linalg import svds
 
 # Creating views functions here.
 
@@ -118,9 +117,9 @@ def watch(request):
 # To get similar movies based on user rating
 # Function to predict ratings
 def get_similar(movie_name,rating,corrMatrix):
-    similar_ratings = corrMatrix[movie_name]*(rating-2.5)
-    similar_ratings = similar_ratings.sort_values(ascending=False)
-    return similar_ratings
+    Pred_ratings = corrMatrix[movie_name]*(rating-2.5)
+    Pred_ratings = Pred_ratings.sort_values(ascending=False)
+    return Pred_ratings
 
 # Recommendation Algorithm
 def recommend(request):
@@ -135,6 +134,7 @@ def recommend(request):
 
     new_user=ratings.user_id.unique().shape[0]
     current_user_id= request.user.id
+
 	# if new user not rated any movie
     if current_user_id>new_user:
         movie=Movie.objects.get(id=10)
@@ -145,20 +145,31 @@ def recommend(request):
     ratingTable = ratings.pivot_table(index=['user_id'],columns=['movie_id'],values='rating')
     
     ratingTable = ratingTable.fillna(0,axis=1)
+
+    #making a correlation similarity matrix of movies
     corrMatrix = ratingTable.corr(method='pearson')
     print(corrMatrix)
 
     curr_user = pd.DataFrame(list(Myrating.objects.filter(user=request.user).values())).drop(['user_id','id'],axis=1)
+
+  #getting list of movie ids and ratings of movie already rated by user
     user_filtered = [tuple(x) for x in curr_user.values]
+	
+	#getting movie ids of the already rated movies by the user
     movie_id_watched = [each[0] for each in user_filtered]
 
     similar_movies = pd.DataFrame()
     for movie,rating in user_filtered:
         similar_movies = similar_movies.append(get_similar(movie,rating,corrMatrix),ignore_index = True)
 
+	#sorting in descending order of ratings of movies
     movies_id = list(similar_movies.sum().sort_values(ascending=False).index)
+
+#taking the movie ids from the 'movies_id' which is not rated by user
     movies_id_recommend = [each for each in movies_id if each not in movie_id_watched]
     preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(movies_id_recommend)])
+
+#getting ten recommended movies
     movie_list=list(Movie.objects.filter(id__in = movies_id_recommend).order_by(preserved)[:10])
 
     context = {'movie_list': movie_list}
